@@ -12,11 +12,11 @@ import Test.Tasty.Hedgehog (testProperty)
 tests :: TestTree
 tests =
   testGroup
-    "Blog.Paths"
-    [ testProperty "normalizeTitleToSlug is idempotent" prop_slug_idempotent
-    , testProperty "normalizeTitleToSlug removes spaces" prop_slug_no_spaces
-    , testProperty "slugToOutputPath always ends with .html" prop_output_html
-    , testProperty "postRoutePath always goes into posts/" prop_route_prefix
+    "Blog.Paths - Routing"
+    [ testProperty "Slug normalization is stable after the first pass" prop_slug_idempotent
+    , testProperty "Slugs never contain whitespace" prop_slug_no_spaces
+    , testProperty "Every generated blog post path is an HTML page" prop_output_html
+    , testProperty "Blog posts are published under the posts/ URL namespace" prop_route_prefix
     ]
 
 prop_slug_idempotent :: Property

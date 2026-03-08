@@ -3,8 +3,35 @@
 module Main where
 
 import Blog.Paths (postRoutePath)
-import Hakyll
-import System.FilePath ((</>))
+import Hakyll (
+    Context
+  , Rules
+  , defaultContext
+  , dateField
+  , relativizeUrls
+  , loadAndApplyTemplate
+  , constField
+  , recentFirst
+  , loadAll
+  , listField
+  , makeItem
+  , route
+  , create
+  , pandocCompiler
+  , idRoute
+  , compile
+  , setExtension
+  , gsubRoute
+  , customRoute
+  , match
+  , fromList
+  , compressCssCompiler
+  , templateBodyCompiler
+  , hakyll
+  , composeRoutes
+  , toFilePath
+  )
+import System.FilePath ()
 
 main :: IO ()
 main = hakyll $ do

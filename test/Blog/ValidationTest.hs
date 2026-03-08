@@ -2,7 +2,7 @@ module Blog.ValidationTest (tests) where
 
 import Blog.Validation
 import Data.List.NonEmpty (NonEmpty(..))
-import Data.Time (Day, fromGregorian)
+import Data.Time (fromGregorian)
 import Hedgehog
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Range as Range
@@ -13,10 +13,10 @@ import qualified Test.Tasty.HUnit as HU
 tests :: TestTree
 tests =
   testGroup
-    "Blog.Validation"
-    [ testProperty "validatePostMeta succeeds on sensible metadata" prop_validate_success
-    , testProperty "validatePostMeta rejects future dates" prop_validate_future_date
-    , HU.testCase "validatePostMeta accumulates title and slug errors" unit_accumulates_errors
+    "Blog.Validation - Metadata validation"
+    [ testProperty "Valid metadata is accepted" prop_validate_success
+    , testProperty "Future-dated posts are rejected" prop_validate_future_date
+    , HU.testCase "Metadata validation reports all independent errors at once" unit_accumulates_errors
     ]
 
 prop_validate_success :: Property
@@ -67,7 +67,6 @@ unit_accumulates_errors = do
           , rawDate  = fromGregorian 2026 3 1
           , rawTags  = []
           }
-
   case validatePostMeta today raw of
     Failure errs -> do
       HU.assertBool "contains EmptyTitle" (EmptyTitle `elemNE` errs)

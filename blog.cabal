@@ -93,6 +93,9 @@ executable blog
 test-suite blog-test
   type:             exitcode-stdio-1.0
   hs-source-dirs:   test
+  other-modules:
+        Blog.PathsTest
+      , Blog.ValidationTest
   main-is:          TestMain.hs
   default-language: GHC2021
   build-depends:
