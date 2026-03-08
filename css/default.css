@@ -1,0 +1,15 @@
+body {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  font-family: system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+nav a {
+  margin-right: 1rem;
+}
+
+pre, code {
+  overflow-x: auto;
+}

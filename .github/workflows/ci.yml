@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Haskell
+        uses: haskell-actions/setup@v2
+        with:
+          ghc-version: "9.10.3"
+          cabal-version: "3.12.1.0"
+
+      - name: Cache cabal
+        uses: actions/cache@v5
+        with:
+          path: |
+            ~/.cabal/store
+            dist-newstyle
+          key: ${{ runner.os }}-cabal-${{ hashFiles('**/*.cabal') }}
+
+      - name: Build site generator
+        run: cabal build
+
+      - name: Generate site
+        run: cabal run blog build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ./_site
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
