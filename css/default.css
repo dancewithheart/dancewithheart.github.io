@@ -13,3 +13,8 @@ nav a {
 pre, code {
   overflow-x: auto;
 }
+
+img {
+  max-width: 100%;
+  height: auto;
+}

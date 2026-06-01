@@ -6,6 +6,7 @@ import Blog.Paths (postRoutePath)
 import Hakyll (
     Context
   , Rules
+  , copyFileCompiler
   , defaultContext
   , dateField
   , relativizeUrls
@@ -36,10 +37,17 @@ import System.FilePath ()
 main :: IO ()
 main = hakyll $ do
   rulesCss
+  rulesImages
   rulesPosts
   rulesPages
   rulesArchive
   match "templates/*" $ compile templateBodyCompiler
+
+rulesImages :: Rules ()
+rulesImages =
+  match "content/img/**" $ do
+    route $ gsubRoute "content/" (const "")
+    compile copyFileCompiler
 
 rulesCss :: Rules ()
 rulesCss =
