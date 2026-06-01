@@ -4,9 +4,10 @@ title: About
 
 I am a software engineer focused on high-assurance open-source infrastructure.
 
-My background is in typed functional programming in Scala (big data, blockchain, container security) and Haskell, abstractions from category theory,
-distributed systems - blockchains in particular.
-I use types, property tests, and formal methods to make software more correct, maintainable, and resistant to code rot by exposing algebraic structure.
+My background is in typed functional programming in Scala (big data, blockchain, container security) and Haskell - abstractions from category theory for
+distributed systems.
+
+I use types to exclude incorrect code, strengthen and test invariants using property tests, exposing algebraic structure and strengthen correctness using formal methods
 
 Current focus (do [not trade the water](https://www.youtube.com/watch?v=j0XmixCsWjs) and do something [about AI induced](https://aisle.com/blog/system-over-model-zero-day-discovery-at-the-jagged-frontier) threats):
 
