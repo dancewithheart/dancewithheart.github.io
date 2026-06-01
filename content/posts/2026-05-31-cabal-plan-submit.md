@@ -231,20 +231,35 @@ on the details for vulnerability you can see GitHub compute severity from CVSS v
 
 ![](/img/search_tag_deprecated.png)
 
+## Ecosystem integration
+
+`cabal-plan-submit` is intended to complement & integrate (in [Milestone 2](https://github.com/dancewithheart/cabal-plan-submit/milestone/2)) with existing Haskell security tooling.
+
+Current discussions:
+
+- `cabal2nix`: using Hackage deprecation metadata and dependency-path logic in Nix-based Haskell workflows: [cabal2nix #128](https://github.com/NixOS/cabal2nix/issues/128)
+- `cabal-audit`: exposing useful SARIF tags and advisory metadata for GitHub Code Scanning: [cabal-audit #75](https://github.com/MangoIV/cabal-audit/pull/75)
+- `haskell-security-action`: optional enrichment of cabal-audit SARIF using Cabal `plan.json`: [haskell-security-action #9](https://github.com/blackheaven/haskell-security-action/issues/9)
+
 ## Future directions
 
 Current workflow:
 
-- cabal-audit produce SARIF with vulnerabilities
-- cabal-plan-submit enrich it and produce report about deprecated dependencies
+- `cabal-audit` produces SARIF with vulnerability reports
+- `cabal-plan-submit` enriches it using Cabal's resolved `plan.json`
+- `cabal-plan-submit` can also report deprecated dependencies and known replacements.
 
-could be further expanded to static analysis from stan - see [stan #483](https://github.com/kowainik/stan/pull/483)
+This could later be expanded in [Milestone 3](https://github.com/dancewithheart/cabal-plan-submit/milestone/3) with usage-aware analysis:
+
+- static analysis inspired by Stan, for example to check whether vulnerable APIs are actually used: [stan #483](https://github.com/kowainik/stan/pull/483)
+- AI-assisted vulnerability triage experiments, for example using tools such as [nano-analyzer](https://github.com/weareaisle/nano-analyzer), which explores lightweight LLM-based source-code security scanning.
+
+The goal would be to move from "this dependency has an advisory" toward "this project depends on the vulnerable package through this path, and this code may or may not exercise the vulnerable API."
 
 ## Known limitations of cabal-plan-submit
 - wrong cabal stanza fallback for package-level dependencies [#22](https://github.com/dancewithheart/cabal-plan-submit/issues/22)
-- alert titles should name deprecated package [#23](https://github.com/dancewithheart/cabal-plan-submit/issues/23)
 - direct dependency should be preferred as primary location [#21](https://github.com/dancewithheart/cabal-plan-submit/issues/21)
-- test/benchmark dependency classification needs refinement
+- test/benchmark dependency classification needs refinement [#26](https://github.com/dancewithheart/cabal-plan-submit/issues/26)
 
 [PRs](https://github.com/dancewithheart/cabal-plan-submit/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22) are very welcome :)
 There is [planned work](https://github.com/dancewithheart/cabal-plan-submit/issues/18) to resolve tech debt created while preparing the MVP.
