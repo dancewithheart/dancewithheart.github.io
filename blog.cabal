@@ -96,6 +96,7 @@ test-suite blog-test
   hs-source-dirs:   test
   other-modules:
         Blog.PathsTest
+      , Blog.RenderingTest
       , Blog.ValidationTest
   main-is:          TestMain.hs
   default-language: GHC2021

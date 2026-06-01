@@ -12,6 +12,7 @@ and deprecated package detection using [cabal-plan-submit](https://github.com/da
 [cabal-audit](https://github.com/MangoIV/cabal-audit) reports vulnerabilities in dependencies
 based on security advisories like [Haskell advisories](https://haskell.github.io/security-advisories/),
 but open-source software maintainers often need to know:
+
 - why is this dependency present?
 - is it direct or transitive?
 - if this is a deprecated dependency is there a known replacement?
@@ -38,6 +39,7 @@ Hackage package cryptonite at version 0.30 is vulnerable for:
 ```
 
 There are 2 issues here:
+
 * the report says `No fix version available`
 * persistent does not depend directly on cryptonite
 
@@ -208,7 +210,7 @@ This can be configured on workflow like so:
 ```
 After this on you project `Insights` > `Dependency graph` should be populated with dependencies:
 
-![GH dependency graph](/img/dependency_graph.png)
+![](/img/dependency_graph.png)
 
 ### Enrich SARIF output from cabal-audit
 
@@ -219,23 +221,24 @@ cabal-plan-submit thanks to knowledge of resolved dependencies can enrich this S
 - precise locations (see [haskell-security-action #1](https://github.com/blackheaven/haskell-security-action/issues/1) and [haskell-security-action #5](https://github.com/blackheaven/haskell-security-action/issues/5))
 - information if dependency is direct or transitive ([cabal-audit #68](https://github.com/MangoIV/cabal-audit/issues/68))
 
-![GH dependency graph](/img/code_scan_results.png)
+![](/img/code_scan_results.png)
 
 on the details for vulnerability you can see GitHub compute severity from CVSS vector (recently improved via [security-advisories #322](https://github.com/haskell/security-advisories/pull/322) and links CVEs thanks to exposed tags (see [cabal-audit #75](https://github.com/MangoIV/cabal-audit/pull/75)).
 
-![GH dependency graph](/img/vuln_details2.png)
+![](/img/vuln_details2.png)
 
 `cabal-plan-submit` can also generate information about deprecated dependencies, and tags to search:
 
-![GH dependency graph](/img/search_tag_deprecated.png)
+![](/img/search_tag_deprecated.png)
 
 ## Future directions
 
 Current workflow:
+
 - cabal-audit produce SARIF with vulnerabilities
 - cabal-plan-submit enrich it and produce report about deprecated dependencies
 
-- could be further expanded to static analysis from stan - see [stan #483](https://github.com/kowainik/stan/pull/483)
+could be further expanded to static analysis from stan - see [stan #483](https://github.com/kowainik/stan/pull/483)
 
 ## Known limitations of cabal-plan-submit
 - wrong cabal stanza fallback for package-level dependencies [#22](https://github.com/dancewithheart/cabal-plan-submit/issues/22)
