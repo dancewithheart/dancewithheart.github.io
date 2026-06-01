@@ -82,6 +82,7 @@ executable blog
         base >=4.18 && <4.23
       , blog
       , filepath >=1.4 && <1.6
+      , pandoc >=3.6 && <3.9
       , hakyll >=4.16 && <4.17
 
     -- Directories containing source files.

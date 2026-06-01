@@ -4,11 +4,16 @@ module Main where
 
 import Blog.Paths (postRoutePath)
 import Hakyll (
-    Context
+    Compiler
+  , Context
+  , Item
   , Rules
   , copyFileCompiler
   , defaultContext
   , dateField
+  , defaultHakyllReaderOptions
+  , defaultHakyllWriterOptions
+  , pandocCompilerWith
   , relativizeUrls
   , loadAndApplyTemplate
   , constField
@@ -18,7 +23,6 @@ import Hakyll (
   , makeItem
   , route
   , create
-  , pandocCompiler
   , idRoute
   , compile
   , setExtension
@@ -32,6 +36,11 @@ import Hakyll (
   , composeRoutes
   , toFilePath
   )
+import Text.Pandoc.Highlighting (pygments)
+import Text.Pandoc.Options
+  ( HighlightMethod (Skylighting)
+  , WriterOptions (..)
+  )
 import System.FilePath ()
 
 main :: IO ()
@@ -42,6 +51,14 @@ main = hakyll $ do
   rulesPages
   rulesArchive
   match "templates/*" $ compile templateBodyCompiler
+
+blogPandocCompiler :: Compiler (Item String)
+blogPandocCompiler =
+  pandocCompilerWith
+    defaultHakyllReaderOptions
+    defaultHakyllWriterOptions
+      { writerHighlightMethod = Skylighting pygments
+      }
 
 rulesImages :: Rules ()
 rulesImages =
@@ -60,7 +77,7 @@ rulesPosts =
   match "content/posts/*" $ do
     route $ customRoute (postRoutePath . toFilePath)
     compile $
-      pandocCompiler
+      blogPandocCompiler
         >>= loadAndApplyTemplate "templates/post.html" postCtx
         >>= loadAndApplyTemplate "templates/default.html" postCtx
         >>= relativizeUrls
@@ -70,7 +87,7 @@ rulesPages =
   match (fromList ["content/index.md", "content/about.md"]) $ do
     route $ gsubRoute "content/" (const "") `composeRoutes` setExtension "html"
     compile $
-      pandocCompiler
+      blogPandocCompiler
         >>= loadAndApplyTemplate "templates/default.html" defaultContext
         >>= relativizeUrls
 
