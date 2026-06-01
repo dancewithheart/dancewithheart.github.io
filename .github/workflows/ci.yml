@@ -11,9 +11,7 @@ jobs:
   build-test:
     runs-on: ubuntu-latest
     permissions:
-      pages: write
-      id-token: write
-      contents: write
+      contents: read
 
     steps:
       - name: Checkout
@@ -29,24 +27,18 @@ jobs:
         uses: actions/cache@v5
         with:
           path: |
+            ~/.cabal/packages
             ~/.cabal/store
             dist-newstyle
-          key: ${{ runner.os }}-cabal-${{ hashFiles('**/*.cabal') }}
+          key: ${{ runner.os }}-ghc-9.10.3-cabal-${{ hashFiles('cabal.project', '**/*.cabal') }}
+          restore-keys: |
+            ${{ runner.os }}-ghc-9.10.3-cabal-
 
-      - name: Build site generator
-        run: cabal build
+      - name: Update package index
+        run: cabal update
 
-      - name: Generate site
-        run: cabal run blog build
+      - name: Build
+        run: cabal build all
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v6
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v5
-        with:
-          path: ./_site
-
-      - name: Deploy
-        id: deployment
-        uses: actions/deploy-pages@v5
+      - name: Test
+        run: cabal test all

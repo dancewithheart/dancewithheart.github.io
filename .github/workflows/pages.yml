@@ -5,13 +5,16 @@ on:
     branches: ["main"]
   workflow_dispatch:
 
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      pages: write
-      id-token: write
-      contents: write
+      contents: read
+
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -26,11 +29,12 @@ jobs:
         uses: actions/cache@v5
         with:
           path: |
+            ~/.cabal/packages
             ~/.cabal/store
             dist-newstyle
-          key: ${{ runner.os }}-cabal-${{ hashFiles('**/*.cabal') }}
+          key: ${{ runner.os }}-ghc-9.10.3-cabal-${{ hashFiles('cabal.project', '**/*.cabal') }}
           restore-keys: |
-            ${{ runner.os }}-cabal-
+            ${{ runner.os }}-ghc-9.10.3-cabal-
 
       - name: Update package index
         run: cabal update
