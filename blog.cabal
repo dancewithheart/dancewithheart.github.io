@@ -58,7 +58,7 @@ library
     , Blog.Validation
   default-language: GHC2021
   build-depends:
-      base >=4.18 && <4.23
+      base >=4.18 && <5
     , bifunctors >=5.6 && <5.7
     , containers >=0.6 && <0.8
     , filepath >=1.4 && <1.6
@@ -79,11 +79,11 @@ executable blog
 
     -- Other library packages from which modules are imported.
     build-depends:
-        base >=4.18 && <4.23
+        base >=4.18 && <5
       , blog
       , filepath >=1.4 && <1.6
-      , pandoc >=3.6 && <3.9
-      , hakyll >=4.16 && <4.17
+      , pandoc >=3.6 && <3.14
+      , hakyll >=4.16 && <4.18
 
     -- Directories containing source files.
     hs-source-dirs:   app
@@ -101,7 +101,7 @@ test-suite blog-test
   main-is:          TestMain.hs
   default-language: GHC2021
   build-depends:
-      base >=4.18 && <4.23
+      base >=4.18 && <5
     , blog
     , filepath >=1.4 && <1.6
     , hedgehog >=1.4 && <1.8
