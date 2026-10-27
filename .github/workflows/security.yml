@@ -2,8 +2,7 @@ name: Dependency submission and security vulnerabilities
 
 on:
   push:
-    branches: [master, main]
-  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 concurrency:
@@ -11,24 +10,28 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: write          # dependency submission API
-  security-events: write   # Code Scanning SARIF upload
+  contents: read
 
 jobs:
   submit-dependencies:
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+      security-events: write
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout target project
         uses: actions/checkout@v6
         with:
           path: project
+          persist-credentials: false
 
       - name: Checkout cabal-plan-submit
         uses: actions/checkout@v6
         with:
           repository: dancewithheart/cabal-plan-submit
           path: cabal-plan-submit
+          persist-credentials: false
 
       - name: Checkout cabal-audit
         uses: actions/checkout@v6
@@ -36,6 +39,7 @@ jobs:
           repository: dancewithheart/cabal-audit
           ref: sarif-github-code-scanning
           path: cabal-audit
+          persist-credentials: false
 
       - name: Setup Haskell
         uses: haskell-actions/setup@v2
