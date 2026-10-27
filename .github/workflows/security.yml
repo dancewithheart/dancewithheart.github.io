@@ -2,8 +2,7 @@ name: Dependency submission and security vulnerabilities
 
 on:
   push:
-    branches: [master, main]
-  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 concurrency:
@@ -11,24 +10,29 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: write          # dependency submission API
-  security-events: write   # Code Scanning SARIF upload
+  contents: read
 
 jobs:
   submit-dependencies:
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+      security-events: write
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout target project
         uses: actions/checkout@v6
         with:
           path: project
+          persist-credentials: false
 
       - name: Checkout cabal-plan-submit
         uses: actions/checkout@v6
         with:
           repository: dancewithheart/cabal-plan-submit
           path: cabal-plan-submit
+          ref: d7b6c922aa1b4e5c8e591c1e2b6c945211d410b7
+          persist-credentials: false
 
       - name: Checkout cabal-audit
         uses: actions/checkout@v6
@@ -36,15 +40,16 @@ jobs:
           repository: dancewithheart/cabal-audit
           ref: sarif-github-code-scanning
           path: cabal-audit
+          persist-credentials: false
 
       - name: Setup Haskell
         uses: haskell-actions/setup@v2
         with:
-          ghc-version: "9.6.7"
-          cabal-version: "3.14"
+          ghc-version: "9.10.3"
+          cabal-version: "3.12.1.0"
 
       - name: Cache Cabal store
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             ~/.cabal/store
@@ -52,9 +57,9 @@ jobs:
             cabal-plan-submit/dist-newstyle
             cabal-audit/dist-newstyle
             project/dist-newstyle
-          key: ${{ runner.os }}-ghc-9.6.7-cabal-3.14-${{ hashFiles('project/**/*.cabal', 'project/cabal.project*', 'cabal-plan-submit/**/*.cabal', 'cabal-plan-submit/cabal.project*', 'cabal-audit/**/*.cabal', 'cabal-audit/cabal.project*') }}
+          key: ${{ runner.os }}-ghc-9.10.3-cabal-3.12.1.0-${{ hashFiles('project/**/*.cabal', 'project/cabal.project*', 'cabal-plan-submit/**/*.cabal', 'cabal-plan-submit/cabal.project*', 'cabal-audit/**/*.cabal', 'cabal-audit/cabal.project*') }}
           restore-keys: |
-            ${{ runner.os }}-ghc-9.6.7-cabal-3.14-
+            ${{ runner.os }}-ghc-9.10.3-cabal-3.12.1.0-
 
       - name: Build target project
         working-directory: project
